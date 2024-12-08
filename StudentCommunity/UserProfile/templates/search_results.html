@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .result-list {
+            list-style: none;
+            padding: 0;
+        }
+        .result-list li {
+            margin-bottom: 10px;
+        }
+        .result-list a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .result-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Search Results</h1>
+            <p>Results for "{{ query }}"</p>
+        </header>
+
+        <!-- Groups Section -->
+        <section>
+            <h2>Groups</h2>
+            <ul class="result-list">
+                {% for group in groups %}
+                    <li><a href="{% url 'join_group' group.id %}">{{ group.name }}</a> - {{ group.description }}</li>
+                {% empty %}
+                    <li>No groups found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Resources Section -->
+        <section>
+            <h2>Resources</h2>
+            <ul class="result-list">
+                {% for resource in resources %}
+                    <li><a href="{% url 'resource_detail' resource.id %}">{{ resource.title }}</a> - {{ resource.description }}</li>
+                {% empty %}
+                    <li>No resources found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Events Section -->
+        <section>
+            <h2>Events</h2>
+            <ul class="result-list">
+                {% for event in events %}
+                    <li>{{ event.title }} on {{ event.date }}</li>
+                {% empty %}
+                    <li>No events found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Tasks Section -->
+        <section>
+            <h2>Tasks</h2>
+            <ul class="result-list">
+                {% for task in tasks %}
+                    <li>{{ task.title }} - {% if task.completed %}Completed{% else %}Pending{% endif %}</li>
+                {% empty %}
+                    <li>No tasks found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Back to Dashboard -->
+        <section>
+            <a href="{% url 'dashboard' %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 10px 20px; border-radius: 4px;">Back to Dashboard</a>
+        </section>
+    </div>
+</body>
+</html>

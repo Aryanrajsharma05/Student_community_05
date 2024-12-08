@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ discussion.title }}</h1>
+<p>{{ discussion.description }}</p>
+<p>Posted by {{ discussion.creator.username }} on {{ discussion.created_at }}</p>
+<a href="{% url 'group_discussions' %}" class="button">Back to Discussions</a>
+{% endblock %}

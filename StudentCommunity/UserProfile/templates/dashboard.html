@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Community Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .button {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin: 5px;
+            display: inline-block;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .form-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Notifications Styling */
+        .notification {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .notification h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .notification p {
+            margin: 5px 0;
+        }
+        .notification .time {
+            font-size: 12px;
+            color: #777;
+        }
+        .mark-read {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .mark-read:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>Welcome, {{ user.username }}</h1>
+            <p>Explore your student community dashboard for the latest updates and resources!</p>
+        </header>
+
+        <!-- Quick Links -->
+        <section>
+            <h2>Quick Links</h2>
+            <div>
+                <a href="{% url 'index' %}" class="button">Go to Home</a>
+                <a href="{% url 'edit_profile' %}" class="button">Edit Profile</a>
+                <a href="{% url 'group_discussions' %}" class="button">Group Discussions</a>
+                <a href="{% url 'documents' %}" class="button">Document Collaboration</a>
+            </div>
+        </section>
+
+        <!-- Notifications Section -->
+        <section class="notifications">
+            <h2>Notifications</h2>
+            <div id="notification-container">
+                {% for notification in notifications %}
+                    <div class="notification">
+                        <div>
+                            <h3>{{ notification.title }}</h3>
+                            <p>{{ notification.message }}</p>
+                            <span class="time">{{ notification.timestamp }}</span>
+                        </div>
+                        <button class="mark-read" data-id="{{ notification.id }}">Mark as Read</button>
+                    </div>
+                {% empty %}
+                    <p>No new notifications.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Activity Feed -->
+        <section>
+            <h2>Activity Feed</h2>
+            <ul>
+                <li>New document collaboration started by John.</li>
+                <li>Sarah posted in "Python Programming" group.</li>
+                <li>Your friend Emma commented on a discussion thread.</li>
+            </ul>
+        </section>
+
+        <!-- Additional Sections (Suggested Groups, Learning Resources, etc.) -->
+
+        <!-- Feedback Section -->
+        <section>
+            <h2>Feedback</h2>
+            <p>We value your feedback! Click the button below to share your thoughts with us.</p>
+            <a href="{% url 'submit_feedback' %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 10px 20px; border-radius: 4px; display: inline-block;">Submit Feedback</a>
+        </section>
+
+        <!-- Search Section -->
+        <section>
+            <h2>Search</h2>
+            <form action="{% url 'search_results' %}" method="GET">
+                <input type="text" name="query" placeholder="Search..." required class="form-input">
+                <button type="submit" class="form-button">Search</button>
+            </form>
+        </section>
+
+    </div>
+
+    <!-- Include JavaScript for Mark as Read -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const markReadButtons = document.querySelectorAll('.mark-read');
+
+            markReadButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const notificationId = button.getAttribute('data-id');
+                    fetch(/mark_as_read/${notificationId}/, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({id: notificationId})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            button.disabled = true;
+                            button.textContent = 'Read';
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

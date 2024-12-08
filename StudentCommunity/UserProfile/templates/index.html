@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Student Community</title>
+    <style>
+        /* General Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+        }
+        nav ul a {
+            text-decoration: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav ul a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            margin-top: 6rem;
+            text-align: center;
+            color: #333;
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+        .section {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .section p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #fff;
+            color: #333;
+            position: relative;
+        }
+        .social-icons {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .social-icons a {
+            text-decoration: none;
+            font-size: 1.5rem;
+            color: #333;
+            transition: color 0.3s;
+        }
+        .social-icons a:hover {
+            color: #007bff;
+        }
+        .image-carousel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .image-slot {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .image-slot:hover img {
+            transform: scale(1.2);
+        }
+        .image-slot.active {
+            transform: scale(1.5);
+            z-index: 10;
+        }
+        .image-slot:not(.active) {
+            opacity: 0.7;
+        }
+        .controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        .control-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .control-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+    <h2>Student Community</h2>
+    <nav>
+        <ul>
+            <li><a href="{% url 'aboutus' %}">About Us</a></li>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}" class="login-btn">Login</a></li>
+                <li><a href="{% url 'signup' %}" class="signup-btn">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<h1>Welcome to Student Community</h1>
+
+<!-- Image Carousel Section -->
+<div class="image-carousel">
+    <div class="controls">
+        <button class="control-btn prev">&lt;</button>
+        <button class="control-btn next">&gt;</button>
+    </div>
+    <div class="image-slot active">
+        <img src="https://th.bing.com/th/id/OIP.ixNmU3DmhGlJX7aol_TjwQHaE7?w=237&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Image 1">
+    </div>
+    <div class="image-slot">
+        <img src="{% static 'images/d2.jpg' %}" alt="Image 2">
+    </div>
+    <div class="image-slot">
+        <img src="{% static 'images/D3.jpeg' %}" alt="Image 3">
+    </div>
+    <div class="image-slot">
+        <img src="{% static 'images/D4.jpg' %}" alt="Image 4">
+    </div>
+</div>
+
+<!-- Features Section -->
+<section class="section">
+    <h2>Our Features</h2>
+    <p>Explore a variety of tools and resources designed to empower students.</p>
+</section>
+
+<!-- Call to Action -->
+<section class="section">
+    <h2>Join Us Today!</h2>
+    <p>Discover the benefits of being part of a dynamic student network.</p>
+    <a href="{% url 'signup' %}" class="btn">Get Started</a>
+</section>
+
+<footer>
+    <p>&copy; 2024 Student Community. Learn, Share, Grow.</p>
+    <div class="social-icons">
+        <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    </div>
+</footer>
+
+<script>
+    const slots = document.querySelectorAll('.image-slot');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let activeIndex = 0;
+
+    function updateCarousel(newIndex) {
+        slots[activeIndex].classList.remove('active');
+        activeIndex = (newIndex + slots.length) % slots.length;
+        slots[activeIndex].classList.add('active');
+    }
+
+    prevBtn.addEventListener('click', () => updateCarousel(activeIndex - 1));
+    nextBtn.addEventListener('click', () => updateCarousel(activeIndex + 1));
+
+    slots.forEach((slot, index) => {
+        slot.addEventListener('click', () => updateCarousel(index));
+    });
+</script>
+
+</body>
+</html>
